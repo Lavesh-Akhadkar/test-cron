@@ -53,7 +53,6 @@ def add_user(username):
 
 
 def update_comments(username):
-    print("\n\n\n-----------------DELETED COMMENTS-------------------")
     # Connect to MongoDB Atlas
     client = MongoClient(connection_string)
 
@@ -74,7 +73,6 @@ def update_comments(username):
                 {"$set": {"deleted": True}}
             )
             dt_object = datetime.fromtimestamp(comment["timestamp"])
-            print("Deleted comment " + comment["comment"] + " at " + str(dt_object))
         '''
         elif comment["comment"] in body:
             if comment["timestamp"] != and comment["deleted"] == True:
@@ -99,7 +97,6 @@ def store_comments(usernames):
     comments_collection = db.get_collection("comments")
 
     for username in usernames:
-        print("\n\n\n--------------INSERTING COMMENTS FOR", username, "------------------")
         user = reddit.redditor(username)
         user_comments = user.comments.new(limit=2048)
 
@@ -112,7 +109,6 @@ def store_comments(usernames):
             if existing_comment == None: 
                 # Store new and unique comments in the database
                 dt_object = datetime.fromtimestamp(comment[1])
-                print("Inserting comment " + comment[0] + str(dt_object))
                 comments_collection.insert_one({
                     "cid": comment[2],
                     "comment": comment[0],
