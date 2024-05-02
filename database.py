@@ -5,15 +5,10 @@ from datetime import datetime
 import praw.models
 from dotenv import load_dotenv
 import os
+import streamlit as st
+st.write('test')
 load_dotenv()
 
-# Configure logging
-handler = logging.StreamHandler()
-handler.setLevel(logging.DEBUG)
-for logger_name in ("praw", "prawcore"):
-    logger = logging.getLogger(logger_name)
-    logger.setLevel(logging.DEBUG)
-    logger.addHandler(handler)
 
 # MongoDB Atlas connection string
 connection_string = "mongodb+srv://"+os.environ.get("DB_USER")+":"+os.environ.get("DB_PASSWORD")+"@reddit.asxgpdh.mongodb.net/?retryWrites=true&w=majority&appName=reddit"
