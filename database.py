@@ -3,7 +3,6 @@ from pymongo import MongoClient
 import logging
 from datetime import datetime
 import praw.models
-from smtplib import SMTP
 from dotenv import load_dotenv
 import os
 load_dotenv()
@@ -133,7 +132,5 @@ def store_comments(usernames):
 
 
 #names = ["zenxy_", "kindad", "zoro_03", "mexin13", "TechyNomad", "minato3421"]
-#add_user(names)
-print('hmm')
+
 store_comments(get_users())
-print('done')
