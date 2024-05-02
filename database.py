@@ -73,17 +73,6 @@ def update_comments(username):
                 {"$set": {"deleted": True}}
             )
             dt_object = datetime.fromtimestamp(comment["timestamp"])
-        '''
-        elif comment["comment"] in body:
-            if comment["timestamp"] != and comment["deleted"] == True:
-                updated_comments.append(comment["comment"])
-                comments_collection.update_one(
-                    {"comment": comment["comment"]},
-                    {"$set": {"deleted": False}}
-                )
-                dt_object = datetime.fromtimestamp(comment["timestamp"])
-                print("Updated comment " + comment["comment"] + " at " + str(dt_object))
-        '''
     client.close()
 
     return deleted_comments
