@@ -119,7 +119,8 @@ def run():
 
 @app.route("/api")
 def api():
-    return store_comments(get_users())
+    store_comments(get_users())
+    return "DONE"
 
 por = os.environ.get("PORT") or 4000
 if __name__ == '__main__':
