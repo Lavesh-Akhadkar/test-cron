@@ -121,5 +121,6 @@ def run():
 def api():
     return store_comments(get_users())
 
+por = os.environ.get("PORT") or 10000
 if __name__ == '__main__':
-    app.run(port=os.environ.get("PORT") or 10000)
+    app.run(port=por)
