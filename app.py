@@ -45,7 +45,7 @@ def add_user(username):
 
 def update_comments(username):
     user = reddit.redditor(username)
-    user_comments = user.comments.new(limit=2048)
+    user_comments = user.comments.new(limit=100)
     body = [comment.body for comment in user_comments]
     deleted_comments = []
 
@@ -75,7 +75,7 @@ def store_comments(usernames):
 
 def store_comments_worker(username):
     user = reddit.redditor(username)
-    user_comments = user.comments.new(limit=2048)
+    user_comments = user.comments.new(limit=100)
 
     comments = [(comment.body, comment.created_utc, comment.id) for comment in user_comments]
     bulk_operations = []
