@@ -118,4 +118,4 @@ def run():
     store_comments(get_users())
 
 if __name__ == '__main__':
-    app.run(port=os.environ.get("PORT"))
+    app.run(port=10000)
