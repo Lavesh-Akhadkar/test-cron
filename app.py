@@ -123,4 +123,4 @@ def api():
 
 por = os.environ.get("PORT") or 4000
 if __name__ == '__main__':
-    app.run(port=por)
+    app.run(host="0.0.0.0",port=por)
