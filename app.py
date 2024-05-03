@@ -55,11 +55,12 @@ def update_comments(username):
 
     for comment in comments_collection.find({"username": username}):
         if comment["comment"] not in body and comment["deleted"] == False:
-            deleted_comments.append(comment["comment"])
-            comments_collection.update_one(
-                {"comment": comment["comment"]},
-                {"$set": {"deleted": True}}
-            )
+            if praw.models.Comment(reddit, comment["cid"]).author != None:
+                deleted_comments.append(comment["comment"])
+                comments_collection.update_one(
+                    {"comment": comment["comment"]},
+                    {"$set": {"deleted": True}}
+                )
     
     client.close()
     return deleted_comments
