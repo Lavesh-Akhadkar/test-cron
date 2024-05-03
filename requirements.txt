@@ -3,3 +3,4 @@ praw==7.7.1
 pymongo==4.7.1
 python-dotenv==1.0.1
 streamlit==1.33.0
+flask==3.0.3
