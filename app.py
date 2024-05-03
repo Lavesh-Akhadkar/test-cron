@@ -1,6 +1,6 @@
 import praw
 from pymongo import MongoClient
-from datetime import datetime
+from datetime import datetime,timedelta
 from dotenv import load_dotenv
 import os
 from flask import Flask
@@ -55,12 +55,15 @@ def update_comments(username):
 
     for comment in comments_collection.find({"username": username}):
         if comment["comment"] not in body and comment["deleted"] == False:
-            if praw.models.Comment(reddit, comment["cid"]).author != None:
-                deleted_comments.append(comment["comment"])
-                comments_collection.update_one(
-                    {"comment": comment["comment"]},
-                    {"$set": {"deleted": True}}
-                )
+
+            check_time = datetime.timestamp(datetime.now() - timedelta(days=20))
+            if comment["timestamp"] > check_time:
+                if praw.models.Comment(reddit, comment["cid"]).author != None:
+                    deleted_comments.append(comment["comment"])
+                    comments_collection.update_one(
+                        {"comment": comment["comment"]},
+                        {"$set": {"deleted": True}}
+                    )
     
     client.close()
     return deleted_comments
