@@ -5,10 +5,10 @@ from datetime import datetime
 import praw.models
 from dotenv import load_dotenv
 import os
-import streamlit as st
-st.write('test')
+from flask import Flask
 load_dotenv()
 
+app = Flask(__name__)
 
 # MongoDB Atlas connection string
 connection_string = "mongodb+srv://"+os.environ.get("DB_USER")+":"+os.environ.get("DB_PASSWORD")+"@reddit.asxgpdh.mongodb.net/?retryWrites=true&w=majority&appName=reddit"
@@ -113,4 +113,7 @@ def store_comments(usernames):
 
 #names = ["zenxy_", "kindad", "zoro_03", "mexin13", "TechyNomad", "minato3421"]
 
-store_comments(get_users())
+
+@app.route("/")
+def run():
+    store_comments(get_users())
