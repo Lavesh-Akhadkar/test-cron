@@ -115,7 +115,11 @@ def store_comments(usernames):
 
 @app.route("/")
 def run():
-    store_comments(get_users())
+    return "HELLO"
+
+@app.route("/api")
+def api():
+    return store_comments(get_users())
 
 if __name__ == '__main__':
-    app.run(port=10000)
+    app.run(port=os.environ.get("PORT") || 10000)
