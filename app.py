@@ -58,7 +58,7 @@ def update_comments(username):
 
             check_time = datetime.timestamp(datetime.now() - timedelta(days=20))
             if comment["timestamp"] > check_time:
-                if praw.models.Comment(reddit, comment["cid"]).author != None:
+                if praw.models.Comment(reddit, comment["cid"]).author == None:
                     deleted_comments.append(comment["comment"])
                     comments_collection.update_one(
                         {"comment": comment["comment"]},
