@@ -85,7 +85,7 @@ def update_comments(username):
 
             check_time = datetime.timestamp(datetime.now() - timedelta(days=20))
             if comment["timestamp"] > check_time:
-                if praw.models.Comment(reddit, comment["cid"]).author != None:
+                if praw.models.Comment(reddit, comment["cid"]).author == None:
                     deleted_comments.append(comment["comment"])
                     comments_collection.update_one(
                         {"comment": comment["comment"]},
@@ -105,7 +105,7 @@ def store_comments(usernames):
 
 def store_comments_worker(username):
     user = reddit.redditor(username)
-    user_comments = user.comments.new(limit=200)
+    user_comments = user.comments.new(limit=100)
 
     comments = [(comment.body, comment.created_utc, comment.id) for comment in user_comments]
     bulk_operations = []
