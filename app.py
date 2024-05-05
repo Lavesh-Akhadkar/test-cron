@@ -5,6 +5,9 @@ from dotenv import load_dotenv
 import os
 from flask import Flask
 from concurrent.futures import ThreadPoolExecutor
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 import praw.models
 
@@ -23,6 +26,30 @@ reddit = praw.Reddit(
     username=os.environ.get('REDDIT_USERNAME'),
     password=os.environ.get('REDDIT_PASSWORD')
 )
+
+
+
+def send_email():
+    sender_email = os.environ.get("SENDER_EMAIL")
+    receiver_email = os.environ.get("RECIEVER_EMAIL")
+    password = os.environ.get("EMAIL_PASSWORD")
+
+    message = MIMEMultipart("alternative")
+    message["Subject"] = "Comment Deletion Notification"
+    message["From"] = sender_email
+    message["To"] = receiver_email
+    website = os.environ.get("WEBSITE")
+    text = f"Hello Ivan C ,\n\nThe a few comments have been deleted, please check them out at {website}\n\n"
+    text += "\nPlease take appropriate action.\n\nBest regards,\nYour Reddit Comment Tracker"
+    part1 = MIMEText(text, "plain")
+    message.attach(part1)
+    
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+        server.login(sender_email, password)
+        server.sendmail(sender_email, receiver_email, message.as_string())
+
+
+
 
 def get_users():
     client = MongoClient(connection_string)
@@ -45,7 +72,7 @@ def add_user(username):
 
 def update_comments(username):
     user = reddit.redditor(username)
-    user_comments = user.comments.new(limit=100)
+    user_comments = user.comments.new(limit=10000)
     body = [comment.body for comment in user_comments]
     deleted_comments = []
 
@@ -58,12 +85,15 @@ def update_comments(username):
 
             check_time = datetime.timestamp(datetime.now() - timedelta(days=20))
             if comment["timestamp"] > check_time:
-                if praw.models.Comment(reddit, comment["cid"]).author == None:
+                if praw.models.Comment(reddit, comment["cid"]).author != None:
                     deleted_comments.append(comment["comment"])
                     comments_collection.update_one(
                         {"comment": comment["comment"]},
                         {"$set": {"deleted": True}}
                     )
+
+    if deleted_comments != []:
+        send_email()                 
     
     client.close()
     return deleted_comments
@@ -75,7 +105,7 @@ def store_comments(usernames):
 
 def store_comments_worker(username):
     user = reddit.redditor(username)
-    user_comments = user.comments.new(limit=100)
+    user_comments = user.comments.new(limit=200)
 
     comments = [(comment.body, comment.created_utc, comment.id) for comment in user_comments]
     bulk_operations = []
