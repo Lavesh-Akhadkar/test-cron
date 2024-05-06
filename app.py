@@ -72,7 +72,7 @@ def add_user(username):
 
 def update_comments(username):
     user = reddit.redditor(username)
-    user_comments = user.comments.new(limit=10000)
+    user_comments = user.comments.new(limit=2048)
     body = [comment.body for comment in user_comments]
     deleted_comments = []
 
