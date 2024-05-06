@@ -83,7 +83,7 @@ def update_comments(username):
     for comment in comments_collection.find({"username": username}):
         if comment["comment"] not in body and comment["deleted"] == False:
 
-            check_time = datetime.timestamp(datetime.now() - timedelta(days=20))
+            check_time = datetime.timestamp(datetime.now() - timedelta(days=50))
             if comment["timestamp"] > check_time:
                 if praw.models.Comment(reddit, comment["cid"]).author == None:
                     deleted_comments.append(comment["comment"])
