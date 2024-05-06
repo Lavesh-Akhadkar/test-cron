@@ -124,7 +124,7 @@ def store_comments_worker(username):
                     "comment": comment[0],
                     "username": username,
                     "timestamp": comment[1],
-                    "permalink": comment[3],  # Store the permalink in the database
+                    "url": "https://www.reddit.com"+comment[3],  # Store the permalink in the database
                     "deleted": False
                 })
             )
