@@ -107,7 +107,7 @@ def store_comments_worker(username):
     user = reddit.redditor(username)
     user_comments = user.comments.new(limit=100)
 
-    comments = [(comment.body, comment.created_utc, comment.id) for comment in user_comments]
+    comments = [(comment.body, comment.created_utc, comment.id, comment.permalink) for comment in user_comments]
     bulk_operations = []
     client = MongoClient(connection_string)
     db = client.get_database("reddit")
@@ -124,6 +124,7 @@ def store_comments_worker(username):
                     "comment": comment[0],
                     "username": username,
                     "timestamp": comment[1],
+                    "permalink": comment[3],  # Store the permalink in the database
                     "deleted": False
                 })
             )
